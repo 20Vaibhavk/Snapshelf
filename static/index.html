@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SnapShelf</title>
+  <meta name="description" content="Turn one product photo into a ready-to-sell listing with Gemma 4 and Cloudinary.">
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo" aria-hidden="true">S</span>
+      <div>
+        <h1>SnapShelf</h1>
+        <p class="tagline">One photo in. A ready-to-sell listing out.</p>
+      </div>
+    </div>
+    <div class="badges">
+      <span class="badge" id="modeBadge">Checking...</span>
+      <span class="badge badge-muted" id="modelBadge"></span>
+    </div>
+  </header>
+
+  <div class="banner" id="demoBanner" hidden>
+    <strong>Demo mode.</strong> You are seeing a sample listing and a local preview.
+    Add your keys to <code>.env</code> and restart to use real Gemma 4 and Cloudinary AI.
+    <span id="missingKeys"></span>
+  </div>
+
+  <main class="layout">
+    <section class="card upload-card" aria-labelledby="uploadHeading">
+      <h2 id="uploadHeading">1. Upload a product photo</h2>
+
+      <label class="dropzone" id="dropzone" for="fileInput" tabindex="0">
+        <input type="file" id="fileInput" accept="image/jpeg,image/png,image/webp" hidden>
+        <img id="previewImg" alt="" hidden>
+        <span class="drop-text" id="dropText">
+          <strong>Drop an image here</strong><br>or click to choose (JPEG, PNG, WEBP, max <span id="maxMb">10</span> MB)
+        </span>
+      </label>
+
+      <h2>2. Choose a background</h2>
+      <div class="color-row">
+        <label class="radio"><input type="radio" name="bgMode" value="auto" checked> AI suggestion</label>
+        <label class="radio"><input type="radio" name="bgMode" value="custom"> Brand colour</label>
+        <input type="color" id="brandColor" value="#e81a3b" aria-label="Brand colour" disabled>
+      </div>
+
+      <h2>3. Pick your channels</h2>
+      <div class="preset-list" id="presetList"></div>
+
+      <button class="btn-primary" id="processBtn" disabled>Generate listing &amp; images</button>
+      <p class="status" id="status" role="status" aria-live="polite"></p>
+    </section>
+
+    <section class="results" id="results" hidden aria-labelledby="resultsHeading">
+      <h2 id="resultsHeading" class="sr-only">Results</h2>
+
+      <div class="stats" id="stats"></div>
+      <div class="warnings" id="warnings"></div>
+
+      <article class="card listing" id="listingCard">
+        <div class="listing-head">
+          <div>
+            <span class="pill" id="lCategory"></span>
+            <h3 id="lTitle"></h3>
+          </div>
+          <button class="btn-ghost" data-copy="all">Copy all</button>
+        </div>
+        <p id="lDescription"></p>
+        <ul class="features" id="lFeatures"></ul>
+        <div class="tags" id="lTags"></div>
+        <dl class="meta">
+          <div><dt>Alt text <button class="link" data-copy="alt">copy</button></dt><dd id="lAlt"></dd></div>
+          <div><dt>Social caption <button class="link" data-copy="caption">copy</button></dt><dd id="lCaption"></dd></div>
+          <div><dt>Suggested background</dt><dd><span class="swatch" id="lSwatch"></span><span id="lHex"></span></dd></div>
+        </dl>
+      </article>
+
+      <article class="card compare-card">
+        <h3>Before and after</h3>
+        <div class="compare" id="compare">
+          <div class="compare-pane after" id="afterPane"><img id="afterImg" alt=""></div>
+          <div class="compare-pane before" id="beforePane"><img id="beforeImg" alt=""></div>
+          <div class="compare-handle" id="compareHandle" aria-hidden="true"></div>
+          <input type="range" min="0" max="100" value="50" id="compareRange" aria-label="Before and after slider">
+        </div>
+        <div class="compare-labels"><span>Original</span><span>SnapShelf marketplace</span></div>
+      </article>
+
+      <h3 class="section-title">Channel-ready images</h3>
+      <div class="variants" id="variants"></div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    Built with <strong>Gemma 4</strong> (Gemini API) and <strong>Cloudinary</strong>. MIT licensed.
+  </footer>
+
+  <template id="variantTpl">
+    <article class="card variant">
+      <div class="frame">
+        <img loading="lazy" alt="">
+        <span class="loading">Generating with Cloudinary AI...</span>
+      </div>
+      <div class="variant-body">
+        <h4></h4>
+        <p class="dims"></p>
+        <p class="note"></p>
+        <div class="variant-actions">
+          <a class="btn-small" target="_blank" rel="noopener">Download</a>
+          <a class="link open" target="_blank" rel="noopener">Open URL</a>
+        </div>
+      </div>
+    </article>
+  </template>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
